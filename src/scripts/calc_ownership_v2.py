@@ -24,17 +24,18 @@ def calculate_ownership(paths: List[Path]) -> None:
     def set_real_rates(current_source, ship, path):
             lower, avg, upper = parse_share_range(path.share)
             # Calculate propagated ownership
+
             try: #if it exists in owenershop alrady
-                current_lower, current_avg, current_upper = ship[current_source]
+                current_lower, current_avg, current_upper = ownership[current_source] if ship=="owned" else owneeship[current_source]
                 current_lower = current_lower * (lower / 100)
                 current_avg = current_avg * (avg / 100)
                 current_upper = current_upper * (upper / 100)
-                if(ship == "own"):
+                if(ship == "owns"):
                     owneeship[current_source] = ((current_lower), (current_avg), (current_upper))
                 else:
                     ownership[current_source] = ((current_lower), (current_avg), (current_upper))
             except KeyError:
-                if(ship == "own"):
+                if(ship == "owns"):
                     owneeship[current_source] = ((lower / 100), (avg / 100), (upper / 100))
                 else:
                     ownership[current_source] = ((lower / 100), (avg / 100), (upper / 100))

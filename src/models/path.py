@@ -27,11 +27,11 @@ def pretty_print_paths(paths: List[Path]) -> None:
     """
     Pretty print a list of Path objects in a tabular format.
     """
-    print(f"{'Entity':<40} {'Lower Share':<12} {'Average Share':<15} {'Upper Share':<12}")
-    print("-" * 80)
+    print(f"{'Entity Name':<80} {'Lower Share':<12} {'Average Share':<15} {'Upper Share':<12}")
+    print("-" * 100)
     for path in paths:
         # Use target_name if .owns is True, otherwise use source_name
-        entity_name = f"Foucs Owns {path.target_name}" if path.owns else path.source_name
+        entity_name = f"{path.target_name} - Owned" if path.owns else path.source_name
         print(f"{entity_name:<80} "
               f"{path.real_lower_share or 'N/A':<12} "
               f"{path.real_average_share or 'N/A':<15} "
