@@ -6,13 +6,13 @@ def calculate_ownership(paths: List[Path]) -> None:
     Calculate real ownership for each company leading to the focus company with depth = 0.
     """
     # Identify the focus company (depth = 0)
-    focus_ids = {path.target for path in paths if path.target_depth == 0}
-    if not focus_ids:
+    focus_nodes = [path for path in paths if path.target_depth == 0]
+    if not focus_nodes:
         raise ValueError("No company with depth = 0 found.")
-    if len(focus_ids) > 1:
-        raise ValueError("Multiple companies with depth = 0 found.")
-
-    focus_id = focus_ids.pop()
+    
+    focus_node = focus_nodes[0]
+    focus_name = focus_node.target_name
+    focus_id = focus_node.target
 
     # Ownership tracking: {source: (lower, average, upper)}
     ownership: Dict[int, Tuple[float, float, float]] = {}
@@ -95,8 +95,8 @@ def calculate_ownership(paths: List[Path]) -> None:
             path.real_lower_share = f"{real_lower * 100:.2f}%"  # Convert to percentage
             path.real_average_share = f"{real_average * 100:.2f}%"  # Convert to percentage
             path.real_upper_share = f"{real_upper * 100:.2f}%"  # Convert to percentage
-        elif path.source in owneeship and path.target_depth<0:
-            real_lower, real_average, real_upper = owneeship[path.source]
+        elif path.target in owneeship and path.target_depth<0:
+            real_lower, real_average, real_upper = owneeship[path.target]
             path.real_lower_share = f"{real_lower * 100:.2f}%"  # Convert to percentage
             path.real_average_share = f"{real_average * 100:.2f}%"  # Convert to percentage
             path.real_upper_share = f"{real_upper * 100:.2f}%"  # Convert to percentage
@@ -105,3 +105,5 @@ def calculate_ownership(paths: List[Path]) -> None:
             path.real_lower_share = "N/A"
             path.real_average_share = "N/A"
             path.real_upper_share = "N/A"
+
+    return focus_id, focus_name

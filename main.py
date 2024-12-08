@@ -26,7 +26,7 @@ try:
     paths = []
 
     # Load and process the selected JSON file
-    with open(f'data/{file}', 'r') as f:
+    with open(f'data/{file}', 'r', encoding="utf-8") as f:
         network = json.load(f)
         for json_path in network:
             if "source" not in json_path or "target" not in json_path or "share" not in json_path:
@@ -34,8 +34,32 @@ try:
                 continue
             paths.append(Path(json_path)) 
 
-    calculate_ownership(paths)
-    pretty_print_paths(paths)
+    focus_id,focus_name = calculate_ownership(paths)
+    pretty_print_paths(paths, focus_id,focus_name)
+
+
+    # Save updated paths back to the same file
+    updated_network = [
+        {
+            "id": path.id,
+            "source": path.source,
+            "source_name": path.source_name,
+            "source_depth": path.source_depth,
+            "target": path.target,
+            "target_name": path.target_name,
+            "target_depth": path.target_depth,
+            "share": path.share,
+            "real_lower_share": path.real_lower_share,
+            "real_average_share": path.real_average_share,
+            "real_upper_share": path.real_upper_share,
+            "active": path.active,
+        }
+        for path in paths
+    ]
+
+    # Save to the same file, overwriting the original
+    with open(f'data/{file}', 'w', encoding="utf-8") as f:
+        json.dump(updated_network, f, ensure_ascii=False, indent=4)
 
 except (ValueError, IndexError) as e:
     print(f"Error: {e}. Please provide a valid file number.")

@@ -23,19 +23,32 @@ class Path:
                 f"real_average_share={self.real_average_share}, real_upper_share={self.real_upper_share}, "
                 f"active={self.active})")
 
-def pretty_print_paths(paths: List[Path]) -> None:
+def pretty_print_paths(paths: List[Path], focus_id, focus_name) -> None:
     """
     Pretty print a list of Path objects in a tabular format.
     """
+    print("-" * 125)
+    print(f"Ownership for: {focus_name}")
+    print("-" * 125)
     print(f"{'Entity Name':<80} {'Lower Share':<12} {'Average Share':<15} {'Upper Share':<12}")
-    print("-" * 100)
+    print("-" * 125)
     for path in paths:
-        # Use target_name if .owns is True, otherwise use source_name
-        entity_name = f"{path.target_name} - Owned" if path.owns else path.source_name
-        print(f"{entity_name:<80} "
+        if path.owns:
+            print(f"{path.target_name:<80} "
+              f"-{path.real_lower_share or 'N/A':<12} "
+              f"-{path.real_average_share or 'N/A':<15} "
+              f"-{path.real_upper_share or 'N/A':<12}")
+        else:
+            print(f"{path.source_name:<80} "
               f"{path.real_lower_share or 'N/A':<12} "
               f"{path.real_average_share or 'N/A':<15} "
               f"{path.real_upper_share or 'N/A':<12}")
+        # Use target_name if .owns is True, otherwise use source_name
+        # entity_name = f"{path.target_name}" if path.owns else path.source_name
+        # print(f"{entity_name:<80} "
+        #       f"{path.real_lower_share or 'N/A':<12} "
+        #       f"{path.real_average_share or 'N/A':<15} "
+        #       f"{path.real_upper_share or 'N/A':<12}")
         
 def parse_share_range(share) -> Tuple[float, float, float]:
         """
