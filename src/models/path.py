@@ -28,7 +28,7 @@ def pretty_print_paths(paths: List[Path], focus_id, focus_name) -> None:
     Pretty print a list of Path objects in a tabular format.
     """
     print("-" * 125)
-    print(f"Ownership for: {focus_name}")
+    print(f"Focus Company: {focus_name}")
     print("-" * 125)
     print(f"{'Entity Name':<80} {'Lower Share':<12} {'Average Share':<15} {'Upper Share':<12}")
     print("-" * 125)

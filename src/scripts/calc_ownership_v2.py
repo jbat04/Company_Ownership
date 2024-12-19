@@ -55,7 +55,8 @@ def calculate_ownership(paths: List[Path]) -> None:
                     # if current_node in visited:
                     #     return  # Prevent infinite recursion due to cycles
                     # visited.add(current_node)
-                    set_real_rates(current_shipper, "owned", current_node)
+                    if(current_target_depth < current_node.source_depth):
+                        set_real_rates(current_shipper, "owned", current_node)
             
                     next_source = current_node.target
                     current_node = next((path_i for path_i in paths if path_i.source == next_source and path_i.target_depth == current_node.target_depth-1), None)
